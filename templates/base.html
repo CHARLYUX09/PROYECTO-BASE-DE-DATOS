@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or "BOOMERANG | Ropa Urbana" }}</title>
+    <!-- Modern Fonts para look urbano -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <header class="topbar">
+        <a class="brand" href="{{ url_for('index') }}">BOOMERANG</a>
+        <nav class="navlinks">
+            <a class="cartlink" href="{{ url_for('index') }}">Inicio</a>
+            <a class="cartlink" href="{{ url_for('tienda') }}">Tienda</a>
+            <a class="cartlink" href="{{ url_for('index') }}#contacto">Contacto</a>
+            {% if usuario %}
+            <a class="cartlink" href="{{ url_for('perfil') }}">Perfil</a>
+            {% if not es_admin %}
+            <a class="cartlink" href="{{ url_for('carrito') }}">Carrito</a>
+            {% endif %}
+            {% if es_admin %}
+            <a class="cartlink" href="{{ url_for('admin_mensajes') }}">Mensajes</a>
+            <a class="cartlink" href="{{ url_for('admin_reporte_ventas') }}">Costos y ganancias</a>
+            {% endif %}
+            <span class="userbadge">{{ usuario['nombre'] }} ({{ usuario['rol'] }})</span>
+            <a class="cartlink" href="{{ url_for('logout') }}">Cerrar sesión</a>
+            {% else %}
+            <a class="cartlink" href="{{ url_for('login') }}">Iniciar sesión</a>
+            {% endif %}
+        </nav>
+    </header>
+
+<!-- Botón superior eliminado visualmente para reubicarlo abajo -->
+
+    <main class="container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alerts">
+            {% for m in messages %}
+            <div class="alert">{{ m }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+
+        {% if request.endpoint != 'index' %}
+        <div class="text-center" style="margin-top: 40px; margin-bottom: 20px;">
+            <a class="btn" href="{{ url_for('index') }}">Volver al Inicio</a>
+        </div>
+        {% endif %}
+    </main>
+
+    <footer class="footer">Hecho con Flask + SQLite</footer>
+</body>
+
+</html>

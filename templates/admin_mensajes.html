@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Bandeja de Mensajes de Contacto</h1>
+
+<div class="row" style="margin-bottom: 20px;">
+    <a class="btn" href="{{ url_for('admin_productos') }}">Volver al panel principal</a>
+</div>
+
+{% if not mensajes %}
+<p class="muted">No hay mensajes nuevos. Revisa más tarde.</p>
+{% else %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Mensaje</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for msg in mensajes %}
+        <tr>
+            <td>#{{ msg['id'] }}</td>
+            <td style="white-space: nowrap;">{{ msg['creado_en'] }}</td>
+            <td><strong>{{ msg['nombre'] }}</strong></td>
+            <td><a href="mailto:{{ msg['email'] }}" style="color: var(--accent);">{{ msg['email'] }}</a></td>
+            <td style="max-width: 300px; white-space: pre-wrap;">{{ msg['mensaje'] }}</td>
+            <td>
+                <form method="post" action="{{ url_for('admin_mensaje_eliminar', mensaje_id=msg['id']) }}" style="display: inline;">
+                    <button class="btn" type="submit"
+                        style="padding: 6px 10px; font-size: 12px; background: #f5e0db; border-color: #e8c9a8; color: #000;"
+                        onclick="return confirm('¿Eliminar mensaje de manera permanente?');">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
