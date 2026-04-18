@@ -8,8 +8,10 @@
     <p><strong>Usuario:</strong> {{ usuario['username'] }}</p>
     <p><strong>Rol:</strong> {{ usuario['rol'] }}</p>
 
+    {% if not es_admin %}
     <!-- Resumen simple del carrito para el usuario general -->
     <p><strong>Productos en carrito:</strong> {{ total_items_carrito }}</p>
+    {% endif %}
 
     <div class="row">
         <a class="btn" href="{{ url_for('tienda') }}">Ir a tienda</a>

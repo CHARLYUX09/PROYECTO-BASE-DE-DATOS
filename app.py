@@ -38,13 +38,13 @@ def normalizar_nombre_imagen(valor):
 
 def semilla_usuarios_demo():
     # Credenciales demo iniciales:
-    # EmilianoAdmin / Holakhace
+    # admin / admin123
     # cliente / cliente123
-    admin_username = "EmilianoAdmin"
-    admin_password_hash = generate_password_hash("Holakhace")
+    admin_username = "admin"
+    admin_password_hash = generate_password_hash("admin123")
 
     admin = db.obtener_usuario_por_username(admin_username)
-    admin_legacy = db.obtener_usuario_por_username("admin")
+    admin_legacy = db.obtener_usuario_por_username("EmilianoAdmin")
 
     if admin:
         # Mantiene el username pedido y actualiza la contraseña en cada arranque.
@@ -58,7 +58,7 @@ def semilla_usuarios_demo():
         )
         db.con.commit()
     elif admin_legacy:
-        # Migra el usuario admin antiguo al nuevo username.
+        # Migra el usuario EmilianoAdmin antiguo al nuevo username "admin".
         db.cursor.execute(
             """
             UPDATE usuarios
@@ -259,7 +259,7 @@ def index():
 
 @app.route("/tienda")
 def tienda():
-    productos = db.listar_productos()[:3]
+    productos = db.listar_productos()
     return render_template("index.html", productos=productos)
 
 
